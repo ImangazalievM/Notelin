@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Notelin</string>
+    <string name="note_is_deleted">Заметка удалена</string>
+    <string name="all_notes_is_deleted">Все заметки удалены</string>
+    <string name="delete">Удалить</string>
+    <string name="save">Сохранить</string>
+    <string name="delete_all">Удалить все</string>
+    <string name="note_info">Информация</string>
+    <string name="sort_by">Сортировка по</string>
+    <string name="sort_by_title">Заголовку</string>
+    <string name="sort_by_date">Дате</string>
+    <string name="search">Поиск</string>
+    <string name="notes_is_empty">Нет заметок</string>
+
+    <string-array name="main_note_context">
+        <item>Открыть</item>
+        <item>Информация</item>
+        <item>Удалить</item>
+    </string-array>
+</resources>
