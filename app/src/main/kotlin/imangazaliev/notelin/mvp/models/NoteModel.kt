@@ -37,14 +37,14 @@ class NoteModel {
     }
 
     /**
-     * Удаляет заметку по id
+     * Удаляет все существующие заметки
      */
     fun deleteAllNotes()  {
         Delete().from(Note::class.java).execute<Note>();
     }
 
     /**
-     * Удаляет все существующие заметки
+     * Удаляет заметку по id
      */
     fun deleteNote(note:Note)  {
         note.delete()

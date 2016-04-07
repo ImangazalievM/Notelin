@@ -37,8 +37,6 @@ dependencies {
     compile 'com.pawegio.kandroid:kandroid:0.5.0@aar'
     //ActiveAndroid DB
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
-    //SharedPreferences
-    compile 'net.grandcentrix.tray:tray:1.0.0-rc1'
     //FAB
     compile 'com.melnykov:floatingactionbutton:1.3.0'
     //MaterialDialog

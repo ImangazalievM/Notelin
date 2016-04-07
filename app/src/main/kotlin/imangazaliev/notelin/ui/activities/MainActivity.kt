@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.pawegio.kandroid.onQuerySubmit
+import imangazaliev.notelin.Presenters
 import imangazaliev.notelin.R
 import imangazaliev.notelin.mvp.common.MvpAppCompatActivity
 import imangazaliev.notelin.mvp.models.Note
