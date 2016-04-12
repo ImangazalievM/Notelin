@@ -1,18 +1,21 @@
 package imangazaliev.notelin.mvp.presenters
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import imangazaliev.notelin.NotelinApplication
+import imangazaliev.notelin.bus.NoteDeleteAction
+import imangazaliev.notelin.bus.NoteEditAction
 import imangazaliev.notelin.mvp.common.SortDate
 import imangazaliev.notelin.mvp.common.SortName
 import imangazaliev.notelin.mvp.models.Note
-import imangazaliev.notelin.mvp.models.NoteModel
+import imangazaliev.notelin.mvp.models.NoteWrapper
 import imangazaliev.notelin.mvp.views.MainView
 import imangazaliev.notelin.ui.activities.NoteActivity
-import imangazaliev.notelin.utils.DateUtils
 import imangazaliev.notelin.utils.PrefsUtils
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import java.util.*
 import javax.inject.Inject
 
@@ -24,10 +27,11 @@ class MainPresenter : MvpPresenter<MainView> {
     }
 
     @Inject
-    lateinit var mNoteWrapper: NoteModel
+    lateinit var mNoteWrapper: NoteWrapper
     lateinit var mNotesList: ArrayList<Note>
 
     constructor() : super() {
+        EventBus.getDefault().register(this)
         NotelinApplication.graph.inject(this)
     }
 
@@ -51,9 +55,8 @@ class MainPresenter : MvpPresenter<MainView> {
      */
     fun loadAllNotes() {
         mNotesList = mNoteWrapper.loadAllNotes() as ArrayList<Note>
-        val sortMethod = getSortMethod(SortNotesBy.valueOf(PrefsUtils.getNotesSortMethod(SortNotesBy.DATE.toString())))
-        Collections.sort(mNotesList, sortMethod)
-        viewState.onNotesLoaded(mNotesList.clone() as ArrayList<Note>)
+        Collections.sort(mNotesList, getSortComparator(getCurrentSortMethod()))
+        viewState.onNotesLoaded(mNotesList)
     }
 
     /**
@@ -72,67 +75,119 @@ class MainPresenter : MvpPresenter<MainView> {
         val note = mNotesList[position];
         mNoteWrapper.deleteNote(note)
         mNotesList.remove(note)
-        viewState.onNoteDeleted(note)
+        viewState.onNoteDeleted()
     }
 
-    fun openNote(context: Context, position: Int) {
-        openNote(context, mNotesList[position])
+    fun openNewNote(activity: Activity) {
+        val newNote = mNoteWrapper.createNote()
+        mNotesList.add(newNote)
+        sortNotesBy(getCurrentSortMethod())
+        openNote(activity, mNotesList.indexOf(newNote))
     }
 
-    fun openNote(context: Context, note: Note) {
-        val intent = Intent(context, NoteActivity::class.java)
-        intent.putExtra("note_id", note.id)
-        context.startActivity(intent)
+    /**
+     * Открывает активити с заметкой по позиции
+     */
+    fun openNote(activity: Activity, position: Int) {
+        val intent = Intent(activity, NoteActivity::class.java)
+        intent.putExtra("note_position", position)
+        intent.putExtra("note_id", mNotesList[position].id)
+        activity.startActivity(intent)
     }
 
-    fun showNoteContextDialog(position: Int) {
-        viewState.showNoteContextDialog(position)
+    /**
+     * Ищет заметку по имени
+     */
+    fun search(query: String) {
+        if (query.equals("")) {
+            viewState.onSearchResult(mNotesList)
+        } else {
+            val searchResults = mNotesList.filter { note -> note.title!!.toLowerCase().startsWith(query.toLowerCase()) }
+            viewState.onSearchResult(searchResults as ArrayList<Note>)
+        }
     }
 
-    fun hideNoteContextDialog() {
-        viewState.hideNoteContextDialog()
-    }
-
-    fun showNoteDeleteDialog(position: Int) {
-        viewState.showNoteDeleteDialog(position)
-    }
-
-    fun hideNoteDeleteDialog() {
-        viewState.hideNoteDeleteDialog()
-    }
-
-    fun showNoteInfo(position: Int) {
-        val note = mNotesList[position]
-        val noteInfo = "Название:\n${note.title}\n" +
-                "Время создания:\n${DateUtils.formatDate(note.changeDate)}\n" +
-                "Время изменения:\n${DateUtils.formatDate(note.changeDate)}";
-        viewState.showNoteInfoDialog(noteInfo)
-    }
-
-    fun hideNoteInfoDialog() {
-        viewState.hideNoteInfoDialog()
-    }
-
+    /**
+     * Сортирует заметки
+     */
     fun sortNotesBy(sortMethod: SortNotesBy) {
-        Collections.sort(mNotesList, getSortMethod(sortMethod))
-        viewState.updateView()
+        Collections.sort(mNotesList, getSortComparator(sortMethod))
         PrefsUtils.setNotesSortMethod(sortMethod.toString())
+        viewState.updateView()
     }
 
-    fun getSortMethod(sortBy: SortNotesBy): Comparator<Note> {
-        when (sortBy) {
+    fun getCurrentSortMethod(): SortNotesBy {
+        val defaultSortMethodName = SortNotesBy.DATE.toString()
+        val currentSortMethodName = PrefsUtils.getNotesSortMethodName(defaultSortMethodName)
+        return SortNotesBy.valueOf(currentSortMethodName)
+    }
+
+    fun getSortComparator(sortMethod: SortNotesBy): Comparator<Note> {
+        when (sortMethod) {
             SortNotesBy.NAME -> return SortName()
             SortNotesBy.DATE -> return SortDate()
         }
     }
 
-    fun search(query: String) {
-        if (query.equals("")) {
-            viewState.onSearchResult(mNotesList)
-        } else {
-            val searchResults = mNotesList.filter { note -> note.title!!.startsWith(query) }
-            viewState.onSearchResult(searchResults as ArrayList<Note>)
-        }
+    /**
+     * Срабатывает при сохранении заметки на экране редактирования
+     */
+    @Subscribe
+    fun onNoteEdit(action: NoteEditAction) {
+        val notePosition = action.position
+        mNotesList[notePosition] = mNoteWrapper.getNoteById(mNotesList[notePosition].id) //обновляем заметку по позиции
+        sortNotesBy(getCurrentSortMethod())
+    }
+
+    /**
+     * Срабатывает при удалении заметки на экране редактирования
+     */
+    @Subscribe
+    fun onNoteDelete(action: NoteDeleteAction) {
+        mNotesList.removeAt(action.position)
+        viewState.updateView()
+    }
+
+    /**
+     * Показывает контекстное меню заметки
+     */
+    fun showNoteContextDialog(position: Int) {
+        viewState.showNoteContextDialog(position)
+    }
+
+    /**
+     * Прячет контекстное меню заметки
+     */
+    fun hideNoteContextDialog() {
+        viewState.hideNoteContextDialog()
+    }
+
+    /**
+     * Показывает диалог удаления заметки
+     */
+    fun showNoteDeleteDialog(position: Int) {
+        viewState.showNoteDeleteDialog(position)
+    }
+
+    /**
+     * Прячет диалог удаления заметки
+     */
+    fun hideNoteDeleteDialog() {
+        viewState.hideNoteDeleteDialog()
+    }
+
+    /**
+     * Показывает диалог с информацией о заметке
+     */
+    fun showNoteInfo(position: Int) {
+        viewState.showNoteInfoDialog(mNotesList[position].getInfo())
+    }
+
+    /**
+     * Прячет диалог с информацией о заметке
+     */
+    fun hideNoteInfoDialog() {
+        viewState.hideNoteInfoDialog()
     }
 
 }

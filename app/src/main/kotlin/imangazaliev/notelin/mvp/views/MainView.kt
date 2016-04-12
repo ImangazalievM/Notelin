@@ -17,7 +17,7 @@ interface MainView : MvpView {
 
     fun onAllNotesDeleted()
 
-    fun onNoteDeleted(note: Note)
+    fun onNoteDeleted()
 
     fun showNoteInfoDialog(noteInfo: String)
 

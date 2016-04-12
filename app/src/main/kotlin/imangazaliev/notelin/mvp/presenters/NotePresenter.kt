@@ -3,10 +3,12 @@ package imangazaliev.notelin.mvp.presenters
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import imangazaliev.notelin.NotelinApplication
+import imangazaliev.notelin.bus.NoteDeleteAction
+import imangazaliev.notelin.bus.NoteEditAction
 import imangazaliev.notelin.mvp.models.Note
-import imangazaliev.notelin.mvp.models.NoteModel
+import imangazaliev.notelin.mvp.models.NoteWrapper
 import imangazaliev.notelin.mvp.views.NoteView
-import imangazaliev.notelin.utils.DateUtils
+import org.greenrobot.eventbus.EventBus
 import java.util.*
 import javax.inject.Inject
 
@@ -14,14 +16,16 @@ import javax.inject.Inject
 class NotePresenter : MvpPresenter<NoteView> {
 
     @Inject
-    lateinit var mNoteWrapper: NoteModel
+    lateinit var mNoteWrapper: NoteWrapper
     lateinit var mNote: Note
+    var mNotePosition: Int = -1
 
     constructor() : super() {
         NotelinApplication.graph.inject(this)
     }
 
-    fun showNote(noteId: Long) {
+    fun showNote(noteId: Long, notePosition: Int) {
+        mNotePosition = notePosition
         mNote = mNoteWrapper.getNoteById(noteId)
         viewState.showNote(mNote)
     }
@@ -31,10 +35,14 @@ class NotePresenter : MvpPresenter<NoteView> {
         mNote.text = text
         mNote.changeDate = Date()
         mNoteWrapper.saveNote(mNote)
+        EventBus.getDefault().post(NoteEditAction(mNotePosition))
+        viewState.onNoteSaved()
     }
 
     fun deleteNote() {
         mNoteWrapper.deleteNote(mNote)
+        EventBus.getDefault().post(NoteDeleteAction(mNotePosition))
+        viewState.onNoteDeleted()
     }
 
     fun showNoteDeleteDialog() {
@@ -46,10 +54,7 @@ class NotePresenter : MvpPresenter<NoteView> {
     }
 
     fun showNoteInfoDialog() {
-        val noteInfo = "Название:\n${mNote.title}\n" +
-                "Время создания:\n${DateUtils.formatDate(mNote.changeDate)}\n" +
-                "Время изменения:\n${DateUtils.formatDate(mNote.changeDate)}";
-        viewState.showNoteInfoDialog(noteInfo)
+        viewState.showNoteInfoDialog(mNote.getInfo())
     }
 
     fun hideNoteInfoDialog() {

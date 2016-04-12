@@ -13,7 +13,7 @@ class PrefsUtils {
             mPrefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         }
 
-        fun getNotesSortMethod(defaultValue: String): String = mPrefs.getString("sort_method", defaultValue)
+        fun getNotesSortMethodName(defaultValue: String): String = mPrefs.getString("sort_method", defaultValue)
 
         fun setNotesSortMethod(sortMethod: String) {
             mPrefs.edit().putString("sort_method", sortMethod).commit()

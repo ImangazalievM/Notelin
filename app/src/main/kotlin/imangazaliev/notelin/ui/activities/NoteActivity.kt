@@ -20,8 +20,8 @@ class NoteActivity : MvpAppCompatActivity(), NoteView {
 
     @InjectPresenter
     lateinit var mPresenter: NotePresenter
-    var mNoteDeleteDialog: MaterialDialog? = null
-    var mNoteInfoDialog: MaterialDialog? = null
+    private var mNoteDeleteDialog: MaterialDialog? = null
+    private var mNoteInfoDialog: MaterialDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +35,9 @@ class NoteActivity : MvpAppCompatActivity(), NoteView {
             }
         };
 
-        mPresenter.showNote(intent.extras.getLong("note_id"))
+        val noteId = intent.extras.getLong("note_id", -1)
+        val notePosition = intent.extras.getInt("note_position", -1)
+        mPresenter.showNote(noteId, notePosition)
     }
 
     override fun showNote(note: Note) {
@@ -65,17 +67,26 @@ class NoteActivity : MvpAppCompatActivity(), NoteView {
                 .positiveText("Да")
                 .negativeText("Нет")
                 .onPositive { materialDialog, dialogAction ->
-                    mPresenter.deleteNote()
                     mPresenter.hideNoteDeleteDialog()
-                    finish()
+                    mPresenter.deleteNote()
                 }
                 .onNegative { materialDialog, dialogAction -> mPresenter.hideNoteDeleteDialog() }
                 .cancelListener { mPresenter.hideNoteDeleteDialog() }
                 .show()
     }
 
+
     override fun hideNoteDeleteDialog() {
         mNoteDeleteDialog?.dismiss()
+    }
+
+    override fun onNoteSaved() {
+        Toast.makeText(this, "Сохранено", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onNoteDeleted() {
+        Toast.makeText(this, R.string.note_is_deleted, Toast.LENGTH_SHORT).show()
+        finish()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -85,18 +96,13 @@ class NoteActivity : MvpAppCompatActivity(), NoteView {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menuSaveNote -> {
-                mPresenter.saveNote(etTitle.text.toString(), etText.text.toString())
-                Toast.makeText(this, "Сохранено", Toast.LENGTH_SHORT).show()
-            }
+            R.id.menuSaveNote -> mPresenter.saveNote(etTitle.text.toString(), etText.text.toString())
 
             R.id.menuDeleteNote -> mPresenter.showNoteDeleteDialog()
 
             R.id.menuNoteInfo -> mPresenter.showNoteInfoDialog()
         }
-
         return super.onOptionsItemSelected(item)
     }
-
 
 }

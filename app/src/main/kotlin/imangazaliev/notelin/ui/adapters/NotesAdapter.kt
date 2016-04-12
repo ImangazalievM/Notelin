@@ -43,14 +43,6 @@ class NotesAdapter : RecyclerView.Adapter<NotesAdapter.ViewHolder> {
         return mNotesList.size
     }
 
-    fun deleteNote(note: Note) {
-        mNotesList.remove(note)
-    }
-
-    fun addNote(note: Note) {
-        mNotesList.add(note)
-    }
-
     /**
      * Реализация класса ViewHolder, хранящего ссылки на виджеты.
      */

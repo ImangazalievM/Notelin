@@ -9,8 +9,7 @@ import android.view.View
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.arellomobile.mvp.presenter.InjectPresenter
-import com.pawegio.kandroid.onQuerySubmit
-import imangazaliev.notelin.Presenters
+import com.pawegio.kandroid.onQueryChange
 import imangazaliev.notelin.R
 import imangazaliev.notelin.mvp.common.MvpAppCompatActivity
 import imangazaliev.notelin.mvp.models.Note
@@ -25,9 +24,9 @@ class MainActivity : MvpAppCompatActivity(), MainView, ItemClickSupport.OnItemCl
 
     @InjectPresenter
     lateinit var mPresenter: MainPresenter
-    var mNoteContextDialog: MaterialDialog? = null
-    var mNoteDeleteDialog: MaterialDialog? = null
-    var mNoteInfoDialog: MaterialDialog? = null
+    private var mNoteContextDialog: MaterialDialog? = null
+    private var mNoteDeleteDialog: MaterialDialog? = null
+    private var mNoteInfoDialog: MaterialDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +37,7 @@ class MainActivity : MvpAppCompatActivity(), MainView, ItemClickSupport.OnItemCl
 
         fabButton.attachToRecyclerView(rvNotesList)
         fabButton.setOnClickListener {
-            val note = mPresenter.createNote()
-            mPresenter.openNote(this, note)
+            mPresenter.openNewNote(this)
         }
     }
 
@@ -59,20 +57,18 @@ class MainActivity : MvpAppCompatActivity(), MainView, ItemClickSupport.OnItemCl
         }
     }
 
-    override fun onSearchResult(notes: ArrayList<Note>) {
-        rvNotesList.adapter = NotesAdapter(notes)
-    }
-
-    override fun onNoteDeleted(note: Note) {
-        (rvNotesList.adapter as NotesAdapter).deleteNote(note)
+    override fun onNoteDeleted() {
         updateView()
         Toast.makeText(this, R.string.note_is_deleted, Toast.LENGTH_SHORT).show()
     }
 
     override fun onAllNotesDeleted() {
         updateView()
-        fabButton.show();
         Toast.makeText(this, R.string.all_notes_is_deleted, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onSearchResult(notes: ArrayList<Note>) {
+        rvNotesList.adapter = NotesAdapter(notes)
     }
 
     override fun showNoteContextDialog(notePosition: Int) {
@@ -126,11 +122,15 @@ class MainActivity : MvpAppCompatActivity(), MainView, ItemClickSupport.OnItemCl
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
 
-        var myActionMenuItem = menu.findItem(R.id.action_search);
-        var searchView = myActionMenuItem.actionView as SearchView;
-        searchView.onQuerySubmit { query -> mPresenter.search(query) }
-        searchView.setOnCloseListener { mPresenter.search(""); false }
+        initSearchView(menu)
         return true
+    }
+
+    private fun initSearchView(menu: Menu) {
+        var searchViewMenuItem = menu.findItem(R.id.action_search);
+        var searchView = searchViewMenuItem.actionView as SearchView;
+        searchView.onQueryChange { query -> mPresenter.search(query) }
+        searchView.setOnCloseListener { mPresenter.search(""); false }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

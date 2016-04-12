@@ -3,6 +3,7 @@ package imangazaliev.notelin.mvp.models
 import com.activeandroid.Model
 import com.activeandroid.annotation.Column
 import com.activeandroid.annotation.Table
+import imangazaliev.notelin.utils.DateUtils
 import java.util.*
 
 /**
@@ -27,4 +28,8 @@ class Note : Model {
     }
 
     constructor()
+
+    fun getInfo(): String = "Название:\n$title\n" +
+            "Время создания:\n${DateUtils.formatDate(createDate)}\n" +
+            "Время изменения:\n${DateUtils.formatDate(changeDate)}";
 }

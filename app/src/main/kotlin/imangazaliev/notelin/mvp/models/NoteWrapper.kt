@@ -4,7 +4,7 @@ import com.activeandroid.query.Delete
 import com.activeandroid.query.Select
 import java.util.*
 
-class NoteModel {
+class NoteWrapper {
 
     /**
      * Создает новую заметку
