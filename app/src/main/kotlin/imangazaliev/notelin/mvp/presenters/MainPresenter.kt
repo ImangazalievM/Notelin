@@ -31,23 +31,14 @@ class MainPresenter : MvpPresenter<MainView> {
     lateinit var mNotesList: ArrayList<Note>
 
     constructor() : super() {
-        EventBus.getDefault().register(this)
         NotelinApplication.graph.inject(this)
+        EventBus.getDefault().register(this)
     }
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
 
         loadAllNotes()
-    }
-
-    /**
-     * Создает новую заметку
-     */
-    fun createNote(): Note {
-        val note = mNoteWrapper.createNote()
-        mNotesList.add(note)
-        return note
     }
 
     /**

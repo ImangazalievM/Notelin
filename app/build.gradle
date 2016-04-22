@@ -13,7 +13,6 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
-        resValue "string", "tray__authority", "${applicationId}.tray"
     }
     buildTypes {
         release {

@@ -1,7 +1,6 @@
 package imangazaliev.notelin.ui.activities
 
 import android.os.Bundle
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
@@ -20,7 +19,7 @@ import imangazaliev.notelin.ui.commons.ItemClickSupport
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
-class MainActivity : MvpAppCompatActivity(), MainView, ItemClickSupport.OnItemClickListener, ItemClickSupport.OnItemLongClickListener {
+class MainActivity : MvpAppCompatActivity(), MainView {
 
     @InjectPresenter
     lateinit var mPresenter: MainPresenter
@@ -32,8 +31,9 @@ class MainActivity : MvpAppCompatActivity(), MainView, ItemClickSupport.OnItemCl
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        ItemClickSupport.addTo(rvNotesList).setOnItemClickListener(this)
-        ItemClickSupport.addTo(rvNotesList).setOnItemLongClickListener (this)
+
+        ItemClickSupport.addTo(rvNotesList).setOnItemClickListener { recyclerView, position, v -> mPresenter.openNote(this, position) }
+        ItemClickSupport.addTo(rvNotesList).setOnItemLongClickListener { recyclerView, position, v -> mPresenter.showNoteContextDialog(position); true }
 
         fabButton.attachToRecyclerView(rvNotesList)
         fabButton.setOnClickListener {
@@ -142,21 +142,12 @@ class MainActivity : MvpAppCompatActivity(), MainView, ItemClickSupport.OnItemCl
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onItemLongClicked(recyclerView: RecyclerView?, notePosition: Int, v: View?): Boolean {
-        mPresenter.showNoteContextDialog(notePosition)
-        return true
-    }
-
     fun onContextDialogItemClick(contextItemPosition: Int, notePosition: Int) {
         when (contextItemPosition) {
             0 -> mPresenter.openNote(this, notePosition)
             1 -> mPresenter.showNoteInfo(notePosition)
             2 -> mPresenter.showNoteDeleteDialog(notePosition)
         }
-    }
-
-    override fun onItemClicked(recyclerView: RecyclerView?, position: Int, v: View?) {
-        mPresenter.openNote(this, position)
     }
 
 }
