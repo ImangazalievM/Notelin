@@ -10,5 +10,5 @@ import javax.inject.Singleton
 interface AppComponent {
     fun inject(mainPresenter : MainPresenter)
 
-    fun inject(mainPresenter : NotePresenter)
+    fun inject(notePresenter: NotePresenter)
 }
