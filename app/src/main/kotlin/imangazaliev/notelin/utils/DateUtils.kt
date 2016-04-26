@@ -11,7 +11,6 @@ class DateUtils {
             var dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm");
             return dateFormat.format(date)
         }
-
     }
 
 }
