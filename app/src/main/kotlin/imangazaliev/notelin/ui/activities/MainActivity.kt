@@ -32,8 +32,10 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         setContentView(R.layout.activity_main)
 
 
-        ItemClickSupport.addTo(rvNotesList).setOnItemClickListener { recyclerView, position, v -> mPresenter.openNote(this, position) }
-        ItemClickSupport.addTo(rvNotesList).setOnItemLongClickListener { recyclerView, position, v -> mPresenter.showNoteContextDialog(position); true }
+        with(ItemClickSupport.addTo(rvNotesList)) {
+            setOnItemClickListener { recyclerView, position, v -> mPresenter.openNote(this@MainActivity, position) }
+            setOnItemLongClickListener { recyclerView, position, v -> mPresenter.showNoteContextDialog(position); true }
+        }
 
         fabButton.attachToRecyclerView(rvNotesList)
         fabButton.setOnClickListener {
