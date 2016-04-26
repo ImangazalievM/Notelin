@@ -4,7 +4,7 @@ import android.content.Context
 import com.activeandroid.app.Application
 import imangazaliev.notelin.di.AppComponent
 import imangazaliev.notelin.di.DaggerAppComponent
-import imangazaliev.notelin.di.NoteModelModule
+import imangazaliev.notelin.di.NoteWrapperModule
 import imangazaliev.notelin.utils.PrefsUtils
 
 class NotelinApplication : Application() {
@@ -20,7 +20,7 @@ class NotelinApplication : Application() {
         PrefsUtils.init(this)
 
         context = this
-        graph = DaggerAppComponent.builder().noteModelModule(NoteModelModule()).build()
+        graph = DaggerAppComponent.builder().noteModelModule(NoteWrapperModule()).build()
     }
 
 }

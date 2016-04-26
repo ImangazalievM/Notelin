@@ -6,7 +6,7 @@ import imangazaliev.notelin.mvp.models.NoteWrapper
 import javax.inject.Singleton
 
 @Module
-class NoteModelModule {
+class NoteWrapperModule {
 
     @Provides
     @Singleton
