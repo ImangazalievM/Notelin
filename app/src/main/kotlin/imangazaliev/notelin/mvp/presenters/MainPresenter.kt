@@ -102,7 +102,7 @@ class MainPresenter : MvpPresenter<MainView> {
      * Сортирует заметки
      */
     fun sortNotesBy(sortMethod: SortNotesBy) {
-        Collections.sort(mNotesList, getSortComparator(sortMethod))
+        mNotesList.sortWith(getSortComparator(sortMethod))
         PrefsUtils.setNotesSortMethod(sortMethod.toString())
         viewState.updateView()
     }
