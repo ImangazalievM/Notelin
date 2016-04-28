@@ -20,7 +20,7 @@ class NotelinApplication : Application() {
         PrefsUtils.init(this)
 
         context = this
-        graph = DaggerAppComponent.builder().noteModelModule(NoteWrapperModule()).build()
+        graph = DaggerAppComponent.builder().noteWrapperModule(NoteWrapperModule()).build()
     }
 
 }
