@@ -23,7 +23,7 @@ class NoteDao {
     /**
      * Загружает все существующие заметки и передает во View
      */
-    fun loadAllNotes(): List<Note> = Select().from(Note::class.java).execute<Note>()
+    fun loadAllNotes() = Select().from(Note::class.java).execute<Note>()
 
     /**
      * Ищет заметку по id и возвращает ее

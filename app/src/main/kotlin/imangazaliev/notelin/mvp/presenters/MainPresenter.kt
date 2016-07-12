@@ -41,7 +41,6 @@ class MainPresenter : MvpPresenter<MainView>() {
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-
         loadAllNotes()
     }
 
@@ -49,7 +48,7 @@ class MainPresenter : MvpPresenter<MainView>() {
      * Загружает все существующие заметки и передает во View
      */
     fun loadAllNotes() {
-        mNotesList = mNoteDao.loadAllNotes() as ArrayList<Note>
+        mNotesList = mNoteDao.loadAllNotes()
         Collections.sort(mNotesList, getCurrentSortMethod())
         viewState.onNotesLoaded(mNotesList)
     }
@@ -97,8 +96,8 @@ class MainPresenter : MvpPresenter<MainView>() {
         if (query.equals("")) {
             viewState.onSearchResult(mNotesList)
         } else {
-            val searchResults = mNotesList.filter { note -> note.title!!.toLowerCase().startsWith(query.toLowerCase()) }
-            viewState.onSearchResult(searchResults as ArrayList<Note>)
+            val searchResults = mNotesList.filter { it.title!!.startsWith(query, ignoreCase = true) }
+            viewState.onSearchResult(searchResults)
         }
     }
 
