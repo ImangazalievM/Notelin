@@ -17,4 +17,3 @@ fun getNotesSortMethodName(defaultValue: String): String = mPrefs.getString("sor
 fun setNotesSortMethod(sortMethod: String) {
             mPrefs.edit().putString("sort_method", sortMethod).commit()
 }
-
