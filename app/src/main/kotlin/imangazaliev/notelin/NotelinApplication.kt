@@ -4,8 +4,8 @@ import android.content.Context
 import com.activeandroid.app.Application
 import imangazaliev.notelin.di.AppComponent
 import imangazaliev.notelin.di.DaggerAppComponent
-import imangazaliev.notelin.di.NoteWrapperModule
-import imangazaliev.notelin.utils.PrefsUtils
+import imangazaliev.notelin.di.NoteDaoModule
+import imangazaliev.notelin.utils.initPrefs
 
 class NotelinApplication : Application() {
 
@@ -17,10 +17,10 @@ class NotelinApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        PrefsUtils.init(this)
+        initPrefs(this)
 
         context = this
-        graph = DaggerAppComponent.builder().noteWrapperModule(NoteWrapperModule()).build()
+        graph = DaggerAppComponent.builder().noteDaoModule(NoteDaoModule()).build()
     }
 
 }

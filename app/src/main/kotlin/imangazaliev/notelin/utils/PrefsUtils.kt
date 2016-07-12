@@ -1,23 +1,20 @@
+@file:JvmName("PrefsUtils")
+
 package imangazaliev.notelin.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import kotlin.properties.Delegates
 
-class PrefsUtils {
+private var mPrefs by Delegates.notNull<SharedPreferences>()
 
-    companion object {
-
-        private lateinit var mPrefs: SharedPreferences
-
-        fun init(context: Context) {
+fun initPrefs(context: Context) {
             mPrefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        }
-
-        fun getNotesSortMethodName(defaultValue: String): String = mPrefs.getString("sort_method", defaultValue)
-
-        fun setNotesSortMethod(sortMethod: String) {
-            mPrefs.edit().putString("sort_method", sortMethod).commit()
-        }
-    }
-
 }
+
+fun getNotesSortMethodName(defaultValue: String): String = mPrefs.getString("sort_method", defaultValue)
+
+fun setNotesSortMethod(sortMethod: String) {
+            mPrefs.edit().putString("sort_method", sortMethod).commit()
+}
+

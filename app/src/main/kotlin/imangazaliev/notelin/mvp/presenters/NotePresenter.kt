@@ -6,21 +6,21 @@ import imangazaliev.notelin.NotelinApplication
 import imangazaliev.notelin.bus.NoteDeleteAction
 import imangazaliev.notelin.bus.NoteEditAction
 import imangazaliev.notelin.mvp.models.Note
-import imangazaliev.notelin.mvp.models.NoteWrapper
+import imangazaliev.notelin.mvp.models.NoteDao
 import imangazaliev.notelin.mvp.views.NoteView
 import org.greenrobot.eventbus.EventBus
 import java.util.*
 import javax.inject.Inject
 
 @InjectViewState
-class NotePresenter : MvpPresenter<NoteView> {
+class NotePresenter : MvpPresenter<NoteView>() {
 
     @Inject
-    lateinit var mNoteWrapper: NoteWrapper
+    lateinit var mNoteWrapper: NoteDao
     lateinit var mNote: Note
     var mNotePosition: Int = -1
 
-    constructor() : super() {
+    init {
         NotelinApplication.graph.inject(this)
     }
 

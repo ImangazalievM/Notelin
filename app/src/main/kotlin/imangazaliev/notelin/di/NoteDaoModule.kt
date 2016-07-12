@@ -2,14 +2,14 @@ package imangazaliev.notelin.di
 
 import dagger.Module
 import dagger.Provides
-import imangazaliev.notelin.mvp.models.NoteWrapper
+import imangazaliev.notelin.mvp.models.NoteDao
 import javax.inject.Singleton
 
 @Module
-class NoteWrapperModule {
+class NoteDaoModule {
 
     @Provides
     @Singleton
-    fun provideNoteModel(): NoteWrapper = NoteWrapper()
+    fun provideNoteModel(): NoteDao = NoteDao()
 
 }

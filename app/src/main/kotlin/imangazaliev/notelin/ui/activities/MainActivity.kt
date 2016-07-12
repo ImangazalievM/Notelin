@@ -17,7 +17,6 @@ import imangazaliev.notelin.mvp.views.MainView
 import imangazaliev.notelin.ui.adapters.NotesAdapter
 import imangazaliev.notelin.ui.commons.ItemClickSupport
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 
 class MainActivity : MvpAppCompatActivity(), MainView {
 
@@ -38,12 +37,10 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         }
 
         fabButton.attachToRecyclerView(rvNotesList)
-        fabButton.setOnClickListener {
-            mPresenter.openNewNote(this)
-        }
+        fabButton.setOnClickListener { mPresenter.openNewNote(this) }
     }
 
-    override fun onNotesLoaded(notes: ArrayList<Note>) {
+    override fun onNotesLoaded(notes: List<Note>) {
         rvNotesList.adapter = NotesAdapter(notes)
         updateView()
     }
@@ -69,7 +66,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         Toast.makeText(this, R.string.all_notes_is_deleted, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onSearchResult(notes: ArrayList<Note>) {
+    override fun onSearchResult(notes: List<Note>) {
         rvNotesList.adapter = NotesAdapter(notes)
     }
 

@@ -7,30 +7,34 @@ import com.arellomobile.mvp.MvpPresenter
 import imangazaliev.notelin.NotelinApplication
 import imangazaliev.notelin.bus.NoteDeleteAction
 import imangazaliev.notelin.bus.NoteEditAction
-import imangazaliev.notelin.mvp.common.SortDate
-import imangazaliev.notelin.mvp.common.SortName
 import imangazaliev.notelin.mvp.models.Note
-import imangazaliev.notelin.mvp.models.NoteWrapper
+import imangazaliev.notelin.mvp.models.NoteDao
 import imangazaliev.notelin.mvp.views.MainView
 import imangazaliev.notelin.ui.activities.NoteActivity
-import imangazaliev.notelin.utils.PrefsUtils
+import imangazaliev.notelin.utils.getNotesSortMethodName
+import imangazaliev.notelin.utils.setNotesSortMethod
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import java.util.*
 import javax.inject.Inject
 
 @InjectViewState
-class MainPresenter : MvpPresenter<MainView> {
+class MainPresenter : MvpPresenter<MainView>() {
 
-    enum class SortNotesBy {
-        DATE, NAME
+    enum class SortNotesBy : Comparator<Note> {
+        DATE {
+            override fun compare(lhs: Note, rhs: Note) = lhs.changeDate!!.compareTo(rhs.changeDate)
+        },
+        NAME {
+            override fun compare(lhs: Note, rhs: Note) = lhs.title!!.compareTo(rhs.title!!)
+        },
     }
 
     @Inject
-    lateinit var mNoteWrapper: NoteWrapper
-    lateinit var mNotesList: ArrayList<Note>
+    lateinit var mNoteWrapper: NoteDao
+    lateinit var mNotesList: MutableList<Note>
 
-    constructor() : super() {
+    init {
         NotelinApplication.graph.inject(this)
         EventBus.getDefault().register(this)
     }
@@ -46,7 +50,7 @@ class MainPresenter : MvpPresenter<MainView> {
      */
     fun loadAllNotes() {
         mNotesList = mNoteWrapper.loadAllNotes() as ArrayList<Note>
-        Collections.sort(mNotesList, getSortComparator(getCurrentSortMethod()))
+        Collections.sort(mNotesList, getCurrentSortMethod())
         viewState.onNotesLoaded(mNotesList)
     }
 
@@ -102,24 +106,16 @@ class MainPresenter : MvpPresenter<MainView> {
      * Сортирует заметки
      */
     fun sortNotesBy(sortMethod: SortNotesBy) {
-        mNotesList.sortWith(getSortComparator(sortMethod))
-        PrefsUtils.setNotesSortMethod(sortMethod.toString())
+        mNotesList.sortWith(sortMethod)
+        setNotesSortMethod(sortMethod.toString())
         viewState.updateView()
     }
 
     fun getCurrentSortMethod(): SortNotesBy {
         val defaultSortMethodName = SortNotesBy.DATE.toString()
-        val currentSortMethodName = PrefsUtils.getNotesSortMethodName(defaultSortMethodName)
+        val currentSortMethodName = getNotesSortMethodName(defaultSortMethodName)
         return SortNotesBy.valueOf(currentSortMethodName)
     }
-
-    fun getSortComparator(sortMethod: SortNotesBy): Comparator<Note> {
-        when (sortMethod) {
-            SortNotesBy.NAME -> return SortName()
-            SortNotesBy.DATE -> return SortDate()
-        }
-    }
-
     /**
      * Срабатывает при сохранении заметки на экране редактирования
      */

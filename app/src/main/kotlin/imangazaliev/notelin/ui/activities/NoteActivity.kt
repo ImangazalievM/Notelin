@@ -13,7 +13,7 @@ import imangazaliev.notelin.mvp.common.MvpAppCompatActivity
 import imangazaliev.notelin.mvp.models.Note
 import imangazaliev.notelin.mvp.presenters.NotePresenter
 import imangazaliev.notelin.mvp.views.NoteView
-import imangazaliev.notelin.utils.DateUtils
+import imangazaliev.notelin.utils.formatDate
 import kotlinx.android.synthetic.main.activity_note.*
 
 class NoteActivity : MvpAppCompatActivity(), NoteView {
@@ -41,7 +41,7 @@ class NoteActivity : MvpAppCompatActivity(), NoteView {
     }
 
     override fun showNote(note: Note) {
-        tvNoteDate.text = DateUtils.formatDate(note.changeDate)
+        tvNoteDate.text = formatDate(note.changeDate)
         etTitle.setText(note.title)
         etText.setText(note.text)
     }

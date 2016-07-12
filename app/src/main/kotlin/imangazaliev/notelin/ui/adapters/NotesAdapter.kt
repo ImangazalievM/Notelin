@@ -7,14 +7,14 @@ import android.view.ViewGroup
 import android.widget.TextView
 import imangazaliev.notelin.R
 import imangazaliev.notelin.mvp.models.Note
-import imangazaliev.notelin.utils.DateUtils
+import imangazaliev.notelin.utils.formatDate
 import java.util.*
 
 class NotesAdapter : RecyclerView.Adapter<NotesAdapter.ViewHolder> {
 
-    private var mNotesList: ArrayList<Note> = ArrayList()
+    private var mNotesList: List<Note> = ArrayList()
 
-    constructor(notesList: ArrayList<Note>) {
+    constructor(notesList: List<Note>) {
         mNotesList = notesList
     }
 
@@ -33,7 +33,7 @@ class NotesAdapter : RecyclerView.Adapter<NotesAdapter.ViewHolder> {
     fun onBindViewHolder(viewHolder: NotesAdapter.ViewHolder, i: Int) {
         var note = mNotesList[i];
         viewHolder.mNoteTitle.text = note.title;
-        viewHolder.mNoteDate.text = DateUtils.formatDate(note.changeDate)
+        viewHolder.mNoteDate.text = formatDate(note.changeDate)
     }
 
     /**

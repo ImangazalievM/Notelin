@@ -4,16 +4,15 @@ import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import imangazaliev.notelin.mvp.models.Note
-import java.util.*
 
 @StateStrategyType(value = AddToEndSingleStrategy::class)
 interface MainView : MvpView {
 
-    fun onNotesLoaded(notes: ArrayList<Note>)
+    fun onNotesLoaded(notes: List<Note>)
 
     fun updateView()
 
-    fun onSearchResult(notes: ArrayList<Note>)
+    fun onSearchResult(notes: List<Note>)
 
     fun onAllNotesDeleted()
 

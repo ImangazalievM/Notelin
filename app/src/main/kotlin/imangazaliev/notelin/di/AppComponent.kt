@@ -6,9 +6,9 @@ import imangazaliev.notelin.mvp.presenters.NotePresenter
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = arrayOf(NoteWrapperModule::class))
+@Component(modules = arrayOf(NoteDaoModule::class))
 interface AppComponent {
-    fun inject(mainPresenter : MainPresenter)
+    fun inject(mainPresenter: MainPresenter)
 
     fun inject(notePresenter: NotePresenter)
 }
