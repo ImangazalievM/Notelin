@@ -10,6 +10,6 @@ class NoteDaoModule {
 
     @Provides
     @Singleton
-    fun provideNoteModel(): NoteDao = NoteDao()
+    fun provideNoteDao(): NoteDao = NoteDao()
 
 }
