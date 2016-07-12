@@ -31,7 +31,7 @@ class MainPresenter : MvpPresenter<MainView>() {
     }
 
     @Inject
-    lateinit var mNoteWrapper: NoteDao
+    lateinit var mNoteDao: NoteDao
     lateinit var mNotesList: MutableList<Note>
 
     init {
@@ -49,7 +49,7 @@ class MainPresenter : MvpPresenter<MainView>() {
      * Загружает все существующие заметки и передает во View
      */
     fun loadAllNotes() {
-        mNotesList = mNoteWrapper.loadAllNotes() as ArrayList<Note>
+        mNotesList = mNoteDao.loadAllNotes() as ArrayList<Note>
         Collections.sort(mNotesList, getCurrentSortMethod())
         viewState.onNotesLoaded(mNotesList)
     }
@@ -58,7 +58,7 @@ class MainPresenter : MvpPresenter<MainView>() {
      * Удаляет все существующие заметки
      */
     fun deleteAllNotes() {
-        mNoteWrapper.deleteAllNotes()
+        mNoteDao.deleteAllNotes()
         mNotesList.removeAll(mNotesList)
         viewState.onAllNotesDeleted()
     }
@@ -68,13 +68,13 @@ class MainPresenter : MvpPresenter<MainView>() {
      */
     fun deleteNoteByPosition(position: Int) {
         val note = mNotesList[position];
-        mNoteWrapper.deleteNote(note)
+        mNoteDao.deleteNote(note)
         mNotesList.remove(note)
         viewState.onNoteDeleted()
     }
 
     fun openNewNote(activity: Activity) {
-        val newNote = mNoteWrapper.createNote()
+        val newNote = mNoteDao.createNote()
         mNotesList.add(newNote)
         sortNotesBy(getCurrentSortMethod())
         openNote(activity, mNotesList.indexOf(newNote))
@@ -122,7 +122,7 @@ class MainPresenter : MvpPresenter<MainView>() {
     @Subscribe
     fun onNoteEdit(action: NoteEditAction) {
         val notePosition = action.position
-        mNotesList[notePosition] = mNoteWrapper.getNoteById(mNotesList[notePosition].id) //обновляем заметку по позиции
+        mNotesList[notePosition] = mNoteDao.getNoteById(mNotesList[notePosition].id) //обновляем заметку по позиции
         sortNotesBy(getCurrentSortMethod())
     }
 

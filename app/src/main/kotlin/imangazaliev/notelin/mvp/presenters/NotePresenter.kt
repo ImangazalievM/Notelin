@@ -16,7 +16,7 @@ import javax.inject.Inject
 class NotePresenter : MvpPresenter<NoteView>() {
 
     @Inject
-    lateinit var mNoteWrapper: NoteDao
+    lateinit var mNoteDao: NoteDao
     lateinit var mNote: Note
     var mNotePosition: Int = -1
 
@@ -26,7 +26,7 @@ class NotePresenter : MvpPresenter<NoteView>() {
 
     fun showNote(noteId: Long, notePosition: Int) {
         mNotePosition = notePosition
-        mNote = mNoteWrapper.getNoteById(noteId)
+        mNote = mNoteDao.getNoteById(noteId)
         viewState.showNote(mNote)
     }
 
@@ -34,13 +34,13 @@ class NotePresenter : MvpPresenter<NoteView>() {
         mNote.title = title
         mNote.text = text
         mNote.changeDate = Date()
-        mNoteWrapper.saveNote(mNote)
+        mNoteDao.saveNote(mNote)
         EventBus.getDefault().post(NoteEditAction(mNotePosition))
         viewState.onNoteSaved()
     }
 
     fun deleteNote() {
-        mNoteWrapper.deleteNote(mNote)
+        mNoteDao.deleteNote(mNote)
         EventBus.getDefault().post(NoteDeleteAction(mNotePosition))
         viewState.onNoteDeleted()
     }
