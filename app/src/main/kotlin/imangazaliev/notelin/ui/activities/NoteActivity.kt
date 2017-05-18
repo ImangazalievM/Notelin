@@ -7,9 +7,9 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
+import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import imangazaliev.notelin.R
-import imangazaliev.notelin.mvp.common.MvpAppCompatActivity
 import imangazaliev.notelin.mvp.models.Note
 import imangazaliev.notelin.mvp.presenters.NotePresenter
 import imangazaliev.notelin.mvp.views.NoteView

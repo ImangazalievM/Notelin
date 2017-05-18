@@ -7,10 +7,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
+import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.pawegio.kandroid.onQueryChange
 import imangazaliev.notelin.R
-import imangazaliev.notelin.mvp.common.MvpAppCompatActivity
 import imangazaliev.notelin.mvp.models.Note
 import imangazaliev.notelin.mvp.presenters.MainPresenter
 import imangazaliev.notelin.mvp.views.MainView
