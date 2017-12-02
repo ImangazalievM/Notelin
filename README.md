@@ -1,8 +1,4 @@
-# Notelin
-
 ![Image](https://raw.githubusercontent.com/ImangazalievM/Notelin/master/art/splash.png)
-
-Note-taking app  for Android written in Kotlin
 
 Libraries and tools included:
 
