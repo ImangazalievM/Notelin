@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="imangazaliev.notelin">
+    package="com.imangazaliev.notelin">
 
     <application
         android:name=".NotelinApplication"
@@ -28,7 +28,7 @@
 
         <meta-data
             android:name="AA_MODELS"
-            android:value="imangazaliev.notelin.mvp.models.Note" />
+            android:value="com.imangazaliev.notelin.mvp.models.Note" />
 
     </application>
 

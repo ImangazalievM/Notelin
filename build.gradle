@@ -1,12 +1,19 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+
+    ext.kotlin_version = '1.2.0'
+
     repositories {
         jcenter()
+        mavenCentral()
+        maven { url 'https://maven.google.com' }
+        google()
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+        classpath 'com.android.tools.build:gradle:3.1.0-alpha04'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
@@ -14,10 +21,9 @@ allprojects {
     repositories {
         jcenter()
         mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        maven { url "https://mvn.arello-mobile.com/" }
         maven { url "https://jitpack.io" }
         maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        google()
     }
 }
 

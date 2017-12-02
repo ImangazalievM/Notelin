@@ -15,7 +15,7 @@
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
         android:paddingBottom="5dp"
-        android:hint="Заголовок"
+        android:hint="@string/title"
         />
 
     <TextView
@@ -35,7 +35,7 @@
         android:layout_height="match_parent"
         android:textColor="#000000"
         android:gravity="start"
-        android:hint="Текст"
+        android:hint="@string/input_your_text"
         android:background="@null"
         android:paddingLeft="10dp"
         />

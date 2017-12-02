@@ -1,4 +1,4 @@
-package imangazaliev.notelin;
+package com.imangazaliev.notelin;
 
 import org.junit.Test;
 

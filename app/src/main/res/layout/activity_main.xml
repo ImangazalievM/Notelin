@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activities.MainActivity">
+
     <TextView
         android:id="@+id/tvNotesIsEmpty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/notes_is_empty"
         android:gravity="center"
-        />
+        android:text="@string/notes_list_empty" />
+
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvNotesList"
+        android:id="@+id/notesList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        />
-    <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/fabButton"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/newNoteFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
+        android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:src="@mipmap/ic_add"
-        app:fab_colorNormal="@color/colorPrimary"
-        app:fab_colorPressed="@color/colorPrimaryDark" />
+        android:src="@drawable/ic_add"
+        app:layout_anchor="@id/notesList"
+        app:layout_anchorGravity="bottom|right|end" />
+
 </FrameLayout>
