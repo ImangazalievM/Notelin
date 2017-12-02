@@ -4,10 +4,11 @@ Libraries and tools included:
 
 - Google AppCompat Support Libraries
 - Google Material Design Support Libraries
+- [ReActiveAndroid](https://github.com/ImangazalievM/ReActiveAndroid) - for persistence
+- [Eventbus](https://github.com/greenrobot/EventBus) - for change notifications
+- [Material Dialogs](https://github.com/afollestad/material-dialogs) - for dialogs
 - [Dagger 2](https://github.com/google/dagger) - for dependency injection
 - [Moxy](https://github.com/Arello-Mobile/Moxy) - for MVP pattern implementation
-- [ReActiveAndroid](https://github.com/ImangazalievM/ReActiveAndroid) - for persistence
-
 
 ## License
 
