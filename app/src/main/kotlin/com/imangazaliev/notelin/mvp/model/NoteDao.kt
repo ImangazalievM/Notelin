@@ -13,19 +13,14 @@ class NoteDao {
         return note
     }
 
-    @Nullable
     fun saveNote(note: Note): Long = note.save()
 
     fun loadAllNotes(): MutableList<Note> = Select.from(Note::class.java).fetch()
 
     fun getNoteById(noteId: Long): Note? = Select.from(Note::class.java).where("id = ?", noteId).fetchSingle()
 
-    fun deleteAllNotes() {
-        Delete.from(Note::class.java).execute()
-    }
+    fun deleteAllNotes() = Delete.from(Note::class.java).execute()
 
-    fun deleteNote(note: Note) {
-        note.delete()
-    }
+    fun deleteNote(note: Note) = note.delete()
 
 }
